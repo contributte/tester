@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Resolve relative folder
+DIR=${0%/*}
+
+# Call nette tester
+${DIR}/tester --colors -j 40 --setup ${DIR}/nunjuck-setup $@

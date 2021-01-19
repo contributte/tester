@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<ruleset name="Contributte">
+	<!-- Contributte Coding Standard -->
+	<rule ref="./vendor/contributte/qa/ruleset.xml">
+		<exclude name="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable"/><!-- Allow globals for testig -->
+		<exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint"/><!-- Remove when >php7.4 -->
+	</rule>
+
+	<!-- Specific rules -->
+	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
+		<properties>
+			<property name="rootNamespaces" type="array" value="
+            	src=>Contributte\Tester
+			"/>
+		</properties>
+	</rule>
+
+	<rule ref="Squiz.Classes.ClassFileName.NoMatch">
+		<exclude-pattern>*tests/cases/*</exclude-pattern>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName.NoMatchBetweenTypeNameAndFileName">
+		<exclude-pattern>*tests/cases/*</exclude-pattern>
+	</rule>
+
+	<!-- Exclude folders -->
+	<exclude-pattern>/tests/tmp</exclude-pattern>
+</ruleset>

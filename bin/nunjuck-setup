@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+
+use Contributte\Tester\OutputHandler\BetterConsolePrinter;
+use Tester\Runner\Runner;
+
+require_once __DIR__ . '/../src/OutputHandler/BetterConsolePrinter.php';
+
+/** @var Runner $runner */
+$runner->outputHandlers = [];
+$runner->outputHandlers[] = new BetterConsolePrinter($runner);

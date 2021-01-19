@@ -1,0 +1,8 @@
+includes:
+	- vendor/phpstan/phpstan-deprecation-rules/rules.neon
+	- vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+	ignoreErrors:
+		- '#Strict comparison using === between false and false will always evaluate to true\.#'
+		- '#Offset ''message'' does not exist on array\(''type'' => int, ''message'' => string, ''file'' => string, ''line'' => int\)\|null\.#'
