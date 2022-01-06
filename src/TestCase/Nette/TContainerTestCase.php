@@ -16,6 +16,7 @@ trait TContainerTestCase
 	}
 
 	/**
+	 * @param class-string $class
 	 * @return object|null
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
 	 */
