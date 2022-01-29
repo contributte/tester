@@ -20,7 +20,7 @@ Environment::setupTester();
 Environment::setupTimezone();
 
 # Configure many constants
-Environment::setupVariables();
+Environment::setupVariables(__DIR__);
 
 # Fill global variables
 Environment::setupGlobalVariables();
