@@ -17,7 +17,7 @@
   ],
   "require": {
     "php": ">=7.4",
-    "nette/tester": "^2.3.4"
+    "nette/tester": "^2.5.0"
   },
   "require-dev": {
     "mockery/mockery": "^1.2.2",
