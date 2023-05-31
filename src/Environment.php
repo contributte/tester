@@ -2,101 +2,60 @@
 
 namespace Contributte\Tester;
 
-use Nette\Loaders\RobotLoader;
+use Contributte\Tester\Utils\FileSystem;
 use RuntimeException;
-use Tester\Environment as TEnvironment;
-use Tester\Helpers as THelpers;
+use Tester\Environment as TesterEnvironment;
 
 class Environment
 {
 
-	public const TESTER_DIR = 'TESTER_DIR';
-	public const APP_DIR = 'APP_DIR';
-	public const WWW_DIR = 'WWW_DIR';
-	public const ENGINE_DIR = 'ENGINE_DIR';
-	public const CASES_DIR = 'CASES_DIR';
-	public const CASES_UNIT_DIR = 'CASES_UNIT_DIR';
-	public const CASES_INTEGRATION_DIR = 'CASES_INTEGRATION_DIR';
-	public const CASES_END_TO_END = 'CASES_END_TO_END';
-	public const CASES_E2E = 'CASES_E2E';
-	public const CASES_FRONTEND = 'CASES_FRONTEND';
-	public const TMP_DIR = 'TMP_DIR';
-	public const TEMP_DIR = 'TEMP_DIR';
-	public const CACHE_DIR = 'CACHE_DIR';
+	public const DEFAULT_TIMEZONE = 'Europe/Prague';
 
-	/**
-	 * Magic setup method
-	 */
-	public static function setup(string $dir): void
+	private static string $cwd;
+
+	private static string $tmpDir;
+
+	private static string $testDir;
+
+	public static function setup(string $cwd): void
 	{
+		self::$cwd = $cwd;
+
 		self::setupTester();
-		self::setupTimezone();
-		self::setupVariables($dir);
+		self::setupTimezone(self::DEFAULT_TIMEZONE);
 		self::setupGlobalVariables();
+		self::setupFolders(self::getCwd());
+		self::setupSessions(self::getTmpDir());
 	}
 
-	/**
-	 * Configure environment
-	 */
 	public static function setupTester(): void
 	{
-		TEnvironment::setup();
+		TesterEnvironment::setup();
 	}
 
-	/**
-	 * Configure timezone
-	 */
-	public static function setupTimezone(string $timezone = 'Europe/Prague'): void
+	public static function setupFunctions(): void
+	{
+		TesterEnvironment::setupFunctions();
+	}
+
+	public static function setupTimezone(string $timezone): void
 	{
 		date_default_timezone_set($timezone);
 	}
 
-	/**
-	 * Configure variables
-	 */
-	public static function setupVariables(string $testerDir): void
+	public static function setupFolders(string $dir): void
 	{
-		if (!is_dir($testerDir)) {
-			die(sprintf('Provide existing folder, "%s" does not exist.', $testerDir));
+		if (!is_dir($dir)) {
+			throw new RuntimeException(sprintf('Provide existing folder, "%s" does not exist.', $dir));
 		}
 
-		// Base tester directory
-		define('TESTER_DIR', realpath($testerDir));
-
-		// Application directories
-		define('APP_DIR', realpath(TESTER_DIR . '/../app'));
-		define('WWW_DIR', realpath(TESTER_DIR . '/../www'));
-
-		// Tester directories
-		define('ENGINE_DIR', TESTER_DIR . '/engine');
-		define('CASES_DIR', TESTER_DIR . '/cases');
-		define('CASES_UNIT_DIR', TESTER_DIR . '/cases/unit');
-		define('CASES_INTEGRATION_IDR', TESTER_DIR . '/cases/integration');
-
-		// Temp, cache directories
-		define('TMP_DIR', TESTER_DIR . '/tmp');
-		define('TEMP_DIR', TMP_DIR . '/tests/' . getmypid() . '/' . md5(uniqid((string) microtime(true), true) . lcg_value() . mt_rand(0, 20) . microtime()));
-		define('CACHE_DIR', TMP_DIR . '/cache');
-		ini_set('session.save_path', TEMP_DIR);
-
-		// Create folders
-		clearstatcache(true, TMP_DIR);
-		self::mkdir(TMP_DIR);
-		clearstatcache(true, CACHE_DIR);
-		self::mkdir(CACHE_DIR);
-		clearstatcache(true, TEMP_DIR);
-		self::mkdir(TEMP_DIR);
-		clearstatcache(true, TEMP_DIR);
-		self::purge(TEMP_DIR);
+		self::ensureFolder(self::$tmpDir = $dir . '/tmp');
+		self::ensureFolder(self::$tmpDir . '/' . getmypid());
 	}
 
-	/**
-	 * @param mixed $value
-	 */
-	// phpcs:ignore
-	public static function setupVariable(string $variable, $value): void
+	public static function setupSessions(string $dir): void
 	{
-		define($variable, $value);
+		ini_set('session.save_path', $dir);
 	}
 
 	/**
@@ -104,6 +63,7 @@ class Environment
 	 */
 	public static function setupGlobalVariables(): void
 	{
+		// @phpcs:ignore SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
 		$_SERVER = array_intersect_key($_SERVER, array_flip([
 			'PHP_SELF',
 			'SCRIPT_NAME',
@@ -115,58 +75,34 @@ class Environment
 			'argc',
 			'argv',
 		]));
+
+		// @phpcs:ignore SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
 		$_SERVER['REQUEST_TIME'] = 1234567890;
+
+		// @phpcs:ignore SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
 		$_ENV = $_GET = $_POST = [];
 	}
 
-	/**
-	 * Configure robot loader
-	 */
-	public static function setupRobotLoader(?callable $callback = null): void
+	public static function ensureFolder(string $dir): void
 	{
-		$loader = new RobotLoader();
-		$loader->setTempDirectory(CACHE_DIR);
-
-		if ($callback !== null) {
-			$callback($loader);
-		} else {
-			$loader->addDirectory(ENGINE_DIR);
-			$loader->addDirectory(APP_DIR);
-			$loader->setAutoRefresh(true);
-		}
-
-		$loader->register();
+		clearstatcache(true, $dir);
+		FileSystem::mkdir($dir);
+		FileSystem::purge($dir);
 	}
 
-	public static function mkdir(string $dir, int $mode = 0777, bool $recursive = true): void
+	public static function getCwd(): string
 	{
-		if (is_dir($dir) === false && @mkdir($dir, $mode, $recursive) === false) {
-			clearstatcache(true, $dir);
-			$error = error_get_last();
-
-			if (is_dir($dir) === false && !file_exists($dir) === false) {
-				throw new RuntimeException(sprintf("Unable to create directory '%s'. " . $error['message'], $dir));
-			}
-		}
+		return self::$cwd;
 	}
 
-	public static function rmdir(string $dir): void
+	public static function getTmpDir(): string
 	{
-		if (!is_dir($dir)) {
-			return;
-		}
-
-		self::purge($dir);
-		@rmdir($dir);
+		return self::$tmpDir;
 	}
 
-	private static function purge(string $dir): void
+	public static function getTestDir(): string
 	{
-		if (!is_dir($dir)) {
-			self::mkdir($dir);
-		}
-
-		THelpers::purge($dir);
+		return self::$testDir;
 	}
 
 }

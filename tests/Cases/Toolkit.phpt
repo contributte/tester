@@ -1,13 +1,9 @@
 <?php declare(strict_types = 1);
 
-namespace Tests;
+namespace Tests\Cases;
 
-/**
- * Test: Toolkit
- */
-
-use Contributte\Tester\Notes;
 use Contributte\Tester\Toolkit;
+use Contributte\Tester\Utils\Notes;
 use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';

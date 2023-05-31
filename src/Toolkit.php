@@ -7,14 +7,13 @@ use Closure;
 class Toolkit
 {
 
-	/** @var object|null */
-	private static $bind;
+	private static ?object $bind = null;
 
 	/** @var callable[] */
-	private static $setUp = [];
+	private static array $setUp = [];
 
 	/** @var callable[] */
-	private static $tearDown = [];
+	private static array $tearDown = [];
 
 	/**
 	 * @param object $object
@@ -43,6 +42,7 @@ class Toolkit
 			}
 
 			$function = Closure::bind($function, self::$bind, self::$bind);
+			assert(is_callable($function));
 		}
 
 		foreach (self::$setUp as $cb) {

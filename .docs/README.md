@@ -10,34 +10,37 @@ composer require --dev contributte/tester
 
 ### Environment
 
+Default configuration:
+
+```php
+use Contributte\Tester\Environment;
+
+Environment::setup(__DIR__);
+```
+
+One-by-one configuration:
+
 ```php
 use Contributte\Tester\Environment;
 
 # Configure Nette\Tester
 Environment::setupTester();
 
-# Configure timezone (Europe/Prague by default)
-Environment::setupTimezone();
+# Configure timezone
+Environment::setupTimezone('Europe/Prague');
 
-# Configure many constants
-Environment::setupVariables(__DIR__);
+# Create folders (/tmp)
+Environment::setupFolders(__DIR__);
 
 # Fill global variables
 Environment::setupGlobalVariables();
 
-# Register robot loader
-Environment::setupRobotLoader();
-Environment::setupRobotLoader(function($loader){});
+// Configure sessions save path
+Environment::setupSessions(__DIR__);
+
+// Allow global test() function
+Environment::setupFunctions();
 ```
-
-### TestCases
-
-There are many predefined test cases.
-
-- `BaseTestCase`
-- `BaseMockeryTestCase` + `TMockeryTestCase`
-- `BaseMockistaTestCase` + `TMockistaTestCase`
-- `BaseContainerTestCase` + `TContainerTestCase`
 
 ### Toolkit
 
@@ -48,19 +51,39 @@ There are many predefined test cases.
 - `Toolkit::bind($object)` binds new context into test function, you can access `$this->` inside.
 - `Toolkit::test(function() { ... })` triggers test function.
 
-### Notes
+### Utils
 
-Little helper to your tests.
+#### Notes
+
+Util class for capturing messages. Useful for callback testing.
 
 ```php
-use Contributte\Tester\Notes;
+use Contributte\Tester\Utils\Notes;
+use Tester\Assert;
 
-Notes::add('My note');
+$someClass->process(function() {
+	Notes::add('called');
+});
 
-# ['My note']
-$notes = Notes::fetch();
+Assert::equal(['called'], Notes::fetch());
+```
 
-Notes::clear();
+## Demo
+
+Complete example of [`tests/bootstrap.php`](`../tests/bootstrap.php`).
+
+```php
+<?php declare(strict_types = 1);
+
+use Contributte\Tester\Environment;
+
+if (@!include __DIR__ . '/../vendor/autoload.php') {
+	echo 'Install dependencies using `composer update --dev`';
+	exit(1);
+}
+
+// Configure environment
+Environment::setup(__DIR__);
 ```
 
 ---------------

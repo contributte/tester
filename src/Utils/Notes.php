@@ -1,12 +1,12 @@
 <?php declare(strict_types = 1);
 
-namespace Contributte\Tester;
+namespace Contributte\Tester\Utils;
 
-final class Notes
+class Notes
 {
 
 	/** @var string[] */
-	public static $notes = [];
+	public static array $notes = [];
 
 	public static function add(string $message): void
 	{

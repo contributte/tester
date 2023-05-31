@@ -1,7 +1,19 @@
 includes:
-	- vendor/phpstan/phpstan-deprecation-rules/rules.neon
-	- vendor/phpstan/phpstan-strict-rules/rules.neon
+	- vendor/contributte/phpstan/phpstan.neon
 
 parameters:
+	level: 9
+	phpVersion: 80000
+
+	scanDirectories:
+		- src
+
+	fileExtensions:
+		- php
+		- phpt
+
+	paths:
+		- src
+		- .docs
+
 	ignoreErrors:
-		- "#^Offset 'message' does not exist on array\\{type\\: int, message\\: string, file\\: string, line\\: int\\}\\|null\\.$#"

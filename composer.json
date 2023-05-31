@@ -1,6 +1,6 @@
 {
   "name": "contributte/tester",
-  "description": "Special tuned version of nette/tester for your PHP projects",
+  "description": "Nette Tester with extra horse power",
   "keywords": [
     "tester",
     "php",
@@ -16,41 +16,36 @@
     }
   ],
   "require": {
-    "php": ">=7.4",
+    "php": ">=8.0",
     "nette/tester": "^2.5.0"
   },
   "require-dev": {
-    "mockery/mockery": "^1.2.2",
-    "janmarek/mockista": "^1.1.0",
-    "nette/di": "~3.0.0",
-    "nette/robot-loader": "^3.2",
-    "contributte/qa": "^0.1",
-    "phpstan/phpstan": "^1.0",
-    "phpstan/phpstan-strict-rules": "^1.0",
-    "phpstan/phpstan-deprecation-rules": "^1.0"
+    "contributte/qa": "^0.4.0",
+    "contributte/phpstan": "^0.1.0",
+    "nette/robot-loader": "^3.4.2",
+    "nette/neon": "^3.4.0",
+    "nette/di": "^3.1.2"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "suggest": {
-    "mockery/mockery": "to use BaseMockeryTestCase",
-    "janmarek/mockista": "to use BaseMockistaTestCase",
-    "nette/di": "to use BaseContainerTestCase"
+    "nette/robot-loader": "for class finding",
+    "nette/neon": "for NEON handling",
+    "nette/di": "for NEON handling"
   },
-  "bin": [
-    "bin/nunjuck",
-    "bin/nunjuck-setup"
-  ],
   "autoload": {
     "psr-4": {
       "Contributte\\Tester\\": "src"
-    },
-    "files": [
-      "src/functions.php"
-    ]
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests"
+    }
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "0.2.x-dev"
+      "dev-master": "0.3.x-dev"
     }
   },
   "config": {
