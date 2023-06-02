@@ -50,7 +50,7 @@ class Environment
 		}
 
 		self::ensureFolder(self::$tmpDir = $dir . '/tmp');
-		self::ensureFolder(self::$tmpDir . '/' . getmypid());
+		self::ensureFolder(self::$testDir = self::$tmpDir . '/' . getmypid());
 	}
 
 	public static function setupSessions(string $dir): void
