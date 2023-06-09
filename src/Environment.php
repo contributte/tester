@@ -49,8 +49,19 @@ class Environment
 			throw new RuntimeException(sprintf('Provide existing folder, "%s" does not exist.', $dir));
 		}
 
-		self::ensureFolder(self::$tmpDir = $dir . '/tmp');
-		self::ensureFolder(self::$testDir = self::$tmpDir . '/' . getmypid());
+		self::$tmpDir = $dir . '/tmp';
+		clearstatcache(true, self::$tmpDir);
+		FileSystem::mkdir(self::$tmpDir);
+
+		self::$testDir = self::$tmpDir . '/' . getmypid();
+		clearstatcache(true, self::$testDir);
+		FileSystem::mkdir(self::$testDir);
+
+		// Drop testDir after all activities
+		register_shutdown_function(function (): void {
+			FileSystem::purge(self::$testDir);
+			FileSystem::rmdir(self::$testDir);
+		});
 	}
 
 	public static function setupSessions(string $dir): void
