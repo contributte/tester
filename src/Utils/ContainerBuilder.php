@@ -4,7 +4,7 @@ namespace Contributte\Tester\Utils;
 
 use Contributte\Tester\Environment;
 use Nette\DI\Compiler;
-use Nette\DI\Container as NetteContainer;
+use Nette\DI\Container;
 use Nette\DI\ContainerLoader;
 
 class ContainerBuilder
@@ -40,7 +40,7 @@ class ContainerBuilder
 		return $this;
 	}
 
-	public function build(): NetteContainer
+	public function build(): Container
 	{
 		$loader = new ContainerLoader($this->getTempDir(), true);
 		$class = $loader->load(function (Compiler $compiler): void {
@@ -49,7 +49,10 @@ class ContainerBuilder
 			}
 		}, $this->key);
 
-		return new $class();
+		/** @var Container $container */
+		$container = new $class();
+
+		return $container;
 	}
 
 	private function getTempDir(): string
