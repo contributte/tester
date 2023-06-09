@@ -13,15 +13,17 @@ class FileSystem
 	public static function purge(string $dir): void
 	{
 		if (!is_dir($dir)) {
-			mkdir($dir);
+			self::mkdir($dir);
 		}
 
+		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
+
 		/** @var SplFileInfo $entry */
-		foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $entry) {
+		foreach ($iterator as $entry) {
 			if ($entry->isDir()) {
-				rmdir((string) $entry->getRealPath());
+				@rmdir((string) $entry->getRealPath());
 			} else {
-				unlink((string) $entry->getRealPath());
+				@unlink((string) $entry->getRealPath());
 			}
 		}
 	}
