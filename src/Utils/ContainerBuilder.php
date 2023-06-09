@@ -58,7 +58,7 @@ class ContainerBuilder
 	private function getTempDir(): string
 	{
 		if ($this->tempDir === null) {
-			return Environment::getTmpDir();
+			return Environment::getTestDir();
 		}
 
 		return $this->tempDir;
