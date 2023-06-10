@@ -116,4 +116,9 @@ class Environment
 		return self::$testDir;
 	}
 
+	public static function skip(string $message): void
+	{
+		TesterEnvironment::skip($message);
+	}
+
 }
