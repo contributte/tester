@@ -69,6 +69,11 @@ class Environment
 		ini_set('session.save_path', $dir);
 	}
 
+	public static function setupFinals(): void
+	{
+		TesterEnvironment::bypassFinals();
+	}
+
 	/**
 	 * Configure global variables
 	 */
