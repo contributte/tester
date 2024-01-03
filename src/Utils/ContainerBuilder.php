@@ -42,6 +42,22 @@ class ContainerBuilder
 
 	public function build(): Container
 	{
+		return $this->buildContainer();
+	}
+
+	/**
+	 * @param array<string, mixed> $parameters
+	 */
+	public function buildWith(array $parameters = []): Container
+	{
+		return $this->buildContainer($parameters);
+	}
+
+	/**
+	 * @param array<string, mixed> $parameters
+	 */
+	private function buildContainer(array $parameters = []): Container
+	{
 		$loader = new ContainerLoader($this->getTempDir(), true);
 		$class = $loader->load(function (Compiler $compiler): void {
 			foreach ($this->onCompile as $cb) {
@@ -50,7 +66,7 @@ class ContainerBuilder
 		}, $this->key);
 
 		/** @var Container $container */
-		$container = new $class();
+		$container = new $class($parameters);
 
 		return $container;
 	}
