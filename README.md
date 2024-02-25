@@ -2,8 +2,8 @@
 
 <p align=center>
 	<a href="https://github.com/contributte/tester/actions"><img src="https://badgen.net/github/checks/contributte/tester/master?cache=300"></a>
-	<a href="https://coveralls.io/r/contributte/tester"><img src="https://badgen.net/coveralls/c/github/contributte/tester?cache=300"></a>
-	<a href="https://packagist.org/packages/contributte/tester"><img src="https://badgen.net/packagist/dm/contributte/tester"></a>
+	<a href="https://codecov.io/gh/contributte/tester"><img src="https://badgen.net/codecov/c/github/contributte/tester"></a>
+    <a href="https://packagist.org/packages/contributte/tester"><img src="https://badgen.net/packagist/dm/contributte/tester"></a>
 	<a href="https://packagist.org/packages/contributte/tester"><img src="https://badgen.net/packagist/v/contributte/tester"></a>
 </p>
 <p align=center>
