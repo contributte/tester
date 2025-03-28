@@ -22,9 +22,9 @@
   "require-dev": {
     "contributte/qa": "^0.4.0",
     "contributte/phpstan": "^0.1.0",
-    "nette/robot-loader": "^3.4.2",
-    "nette/neon": "^3.4.0",
-    "nette/di": "^3.1.2"
+    "nette/robot-loader": "^4.0.3",
+    "nette/neon": "^3.4.4",
+    "nette/di": "^3.2.4"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
