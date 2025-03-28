@@ -59,10 +59,12 @@ class ContainerBuilder
 	private function buildContainer(array $parameters = []): Container
 	{
 		$loader = new ContainerLoader($this->getTempDir(), true);
-		$class = $loader->load(function (Compiler $compiler): void {
+		$class = $loader->load(function (Compiler $compiler) use ($parameters): void {
 			foreach ($this->onCompile as $cb) {
 				$cb($compiler);
 			}
+
+			$compiler->setDynamicParameterNames(array_keys($parameters));
 		}, $this->key);
 
 		/** @var Container $container */
