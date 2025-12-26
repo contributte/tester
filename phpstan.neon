@@ -10,10 +10,7 @@ parameters:
 
 	fileExtensions:
 		- php
-		- phpt
 
 	paths:
 		- src
 		- .docs
-
-	ignoreErrors:
