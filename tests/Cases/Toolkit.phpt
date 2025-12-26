@@ -1,15 +1,12 @@
 <?php declare(strict_types = 1);
 
-namespace Tests\Cases;
-
 use Contributte\Tester\Toolkit;
 use Contributte\Tester\Utils\Notes;
 use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
 
-class BindClass
-{
+$bindObject = new class {
 
 	public function call1(): void
 	{
@@ -21,7 +18,7 @@ class BindClass
 		Notes::add('CALL2');
 	}
 
-}
+};
 
 Toolkit::setUp(function (): void {
 	Notes::add('SETUP1');
@@ -39,7 +36,7 @@ Toolkit::tearDown(function (): void {
 	Notes::add('DOWN2');
 });
 
-Toolkit::bind(new BindClass());
+Toolkit::bind($bindObject);
 
 Toolkit::test(function (): void {
 	$this->call1();
