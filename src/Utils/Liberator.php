@@ -44,7 +44,10 @@ class Liberator
 		}
 
 		$property = $this->class->getProperty($name);
-		$property->setAccessible(true);
+
+		if (PHP_VERSION_ID < 80100) {
+			$property->setAccessible(true);
+		}
 
 		return /* $property->isInitialized($this->object) &&*/ $property->getValue($this->object) !== null;
 	}
@@ -52,7 +55,10 @@ class Liberator
 	public function __get(string $name): mixed
 	{
 		$property = $this->class->getProperty($name);
-		$property->setAccessible(true);
+
+		if (PHP_VERSION_ID < 80100) {
+			$property->setAccessible(true);
+		}
 
 		return $property->getValue($this->object);
 	}
@@ -60,7 +66,11 @@ class Liberator
 	public function __set(string $name, mixed $value): void
 	{
 		$property = $this->class->getProperty($name);
-		$property->setAccessible(true);
+
+		if (PHP_VERSION_ID < 80100) {
+			$property->setAccessible(true);
+		}
+
 		$property->setValue($this->object, $value);
 	}
 
@@ -70,7 +80,10 @@ class Liberator
 	public function __call(string $name, array $args = []): mixed
 	{
 		$method = $this->class->getMethod($name);
-		$method->setAccessible(true);
+
+		if (PHP_VERSION_ID < 80100) {
+			$method->setAccessible(true);
+		}
 
 		return $method->invokeArgs($this->object, $args);
 	}
