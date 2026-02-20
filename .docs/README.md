@@ -53,6 +53,33 @@ Environment::setupFunctions();
 
 ### Utils
 
+#### ContainerPatcher
+
+Util class for replacing existing services in compiled Nette DI containers.
+
+```php
+use Contributte\Tester\Utils\ContainerPatcher;
+use Nette\DI\Container;
+
+ContainerPatcher::of($container)
+	// replace one service by name
+	->service('http.client', fn (Container $container): object => new FakeHttpClient())
+	// replace all services by type (closure can receive service name)
+	->type(App\Contracts\Clock::class, fn (Container $container, string $name): object => new FrozenClock())
+	// replace all services tagged by a custom tag
+	->tag('app.transport', fn (): object => new InMemoryTransport())
+	// patch by pre-built service instance
+	->serviceInstance('http.client', new FakeHttpClient());
+```
+
+Available methods:
+
+- `ContainerPatcher::of($container)` creates patcher for given container.
+- `->service('name', $factory)` patches service by service name.
+- `->type(SomeClass::class, $factory)` patches all services matching type.
+- `->tag('tag.name', $factory)` patches all services with given tag.
+- `->serviceInstance()`, `->typeInstance()`, `->tagInstance()` patch by pre-built object instance.
+
 #### Notes
 
 Util class for capturing messages. Useful for callback testing.
