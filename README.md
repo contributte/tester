@@ -52,16 +52,16 @@ One-by-one configuration:
 ```php
 use Contributte\Tester\Environment;
 
-# Configure Nette\Tester
+// Configure Nette\Tester
 Environment::setupTester();
 
-# Configure timezone
+// Configure timezone
 Environment::setupTimezone('Europe/Prague');
 
-# Create folders (/tmp)
+// Create folders (/tmp)
 Environment::setupFolders(__DIR__);
 
-# Fill global variables
+// Fill global variables
 Environment::setupGlobalVariables();
 
 // Configure sessions save path
@@ -73,10 +73,10 @@ Environment::setupFunctions();
 
 ### Toolkit
 
-`Toolkit` is class for handling anonymous tests functions.
+`Toolkit` handles anonymous test functions.
 
-- `Toolkit::setUp(function() { ... })` is called before test function.
-- `Toolkit::tearDown(function() { ... })` is after before test function.
+- `Toolkit::setUp(function() { ... })` is called before each test function.
+- `Toolkit::tearDown(function() { ... })` is called after each test function.
 - `Toolkit::bind($object)` binds new context into test function, you can access `$this->` inside.
 - `Toolkit::test(function() { ... })` triggers test function.
 
